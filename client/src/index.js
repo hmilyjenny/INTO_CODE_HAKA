@@ -2,10 +2,6 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 import { DatePicker } from 'antd';
 
-const {
-  DatePicker
-} = antd;
-
 
 var Hello = React.createClass({
   render() {
