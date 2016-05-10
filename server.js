@@ -4,7 +4,9 @@ import path from 'path';
 var express = require("express");
 var app = new Express();
 
-//app.use(express.static(__dirname + "/public"));
+import serverConfig from './config';
+
+app.use(express.static(__dirname + "/public"));
 
 app.get('*', function (request, response){
   response.sendFile(path.resolve(__dirname, 'public', 'index.html'))
