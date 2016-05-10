@@ -6,9 +6,9 @@ var app = new Express();
 
 app.use(express.static(__dirname + "/public"));
 
-app.get('*', function (request, response){
-  response.sendFile(path.resolve(__dirname, 'public', 'index.html'))
-});
+// app.get('*', function (request, response){
+//   response.sendFile(path.resolve(__dirname, 'public', 'index.html'))
+// });
 
 var server=app.listen(serverConfig.port, (error) => {
   if (!error) {
