@@ -6,7 +6,6 @@ import { DatePicker } from 'antd';
 var Hello = React.createClass({
   render() {
     return <div style={{margin: 10}}>
-      <h1>antd@{antd.version}</h1>
       <DatePicker />
     </div>;
   }
