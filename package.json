@@ -4,11 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "postinstall": "webpack --config ./webpack-prod.config.js --progress --colors",
+    "start": "node index.js"
   },
   "author": "Jason,Zhouyi",
   "license": "MIT",
   "dependencies": {
+    "babel-core": "^6.8.0",
+    "babel-polyfill": "^6.8.0",
     "express": "^4.13.4"
   }
 }
