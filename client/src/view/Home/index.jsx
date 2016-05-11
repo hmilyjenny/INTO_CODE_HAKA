@@ -1,10 +1,11 @@
 import React from 'react';
-import { DatePicker } from 'antd';
+import Header from './Header';
 
 var Home = React.createClass({
   render: function(){
     return(
-      <DatePicker />
+     <Header />
     )
   }
 });
+export default Home;

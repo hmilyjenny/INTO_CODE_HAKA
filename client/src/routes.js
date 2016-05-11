@@ -4,7 +4,7 @@ import App from './containers/App';
 import Home from './view/Home'
 
 export default(
-    <Route  component={App}>
+   <Route path="/" component={App}>
       <IndexRoute component={Home} />
-    </Route>
+  </Route>
 );

@@ -9,8 +9,8 @@ var App = React.createClass({
     )
   }
 });
-App.propTypes = {
-  children: PropTypes.object.isRequired,
-};
+// App.propTypes = {
+//   children: PropTypes.object.isRequired,
+// };
 
 export default App;
