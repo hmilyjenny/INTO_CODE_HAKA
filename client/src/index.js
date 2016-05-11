@@ -1,17 +1,20 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
-import 'antd/lib/index.css';
-import { DatePicker } from 'antd';
+import { Provider } from 'react-redux';
+import { Router,browserHistory } from 'react-router';
+import DevTools from './containers/DevTools/DevTools';
+import routes from './routes';
+import configureStore from './store';
+import './common/lib';
 
 
-var Hello = React.createClass({
-  render() {
-    return <div style={{margin: 10}}>
-      <DatePicker />
-    </div>;
-  }
-});
+const store = configureStore();
 
-ReactDOM.render(<Hello />,
-  document.getElementById('app')
+render(
+  <Provider store={store}>
+    <div>
+      <Router history={browserHistory} routes={routes} />
+      <DevTools/>
+    </div>
+  </Provider>, document.getElementById('app')
 );

@@ -1,14 +1,23 @@
 {
   "name": "haka",
   "version": "1.0.0",
-  "description": "",
+  "description": "基于音码文件的产品宣传平台",
   "main": "index.js",
   "scripts": {
     "postinstall": "webpack --config ./webpack-prod.config.js --progress --colors",
-    "start": "node index.js"
+    "start": "node index.js",
+    "build": "node_modules/.bin/webpack"
   },
   "author": "Jason,Zhouyi",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hmilyjeny/INTO_CODE_HAKA.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hmilyjeny/INTO_CODE_HAKA/issues"
+  },
+  "homepage": "https://github.com/hmilyjeny/INTO_CODE_HAKA#readme",
   "dependencies": {
     "antd": "^0.12.17",
     "babel-core": "^6.8.0",
@@ -22,8 +31,17 @@
     "file-loader": "^0.8.5",
     "react": "^0.14.8",
     "react-dom": "^0.14.8",
+    "react-redux": "^4.4.5",
+    "react-router": "^2.4.0",
+    "redux": "^3.5.2",
+    "redux-devtools": "^3.3.1",
+    "redux-devtools-dock-monitor": "^1.1.1",
+    "redux-devtools-log-monitor": "^1.0.11",
+    "redux-thunk": "^2.1.0",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
-    "webpack": "^1.13.0"
+    "webpack": "^1.13.0",
+    "webpack-dev-middleware": "^1.6.1",
+    "webpack-hot-middleware": "^2.10.0"
   }
 }
