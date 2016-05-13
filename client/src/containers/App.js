@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react';
-
+import './App.css'; 
 var App = React.createClass({
   render:function(){
     return(
-      <div>
+      <div className='page-wrapper'>
         {this.props.children}
      </div>
     )

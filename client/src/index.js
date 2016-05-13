@@ -5,7 +5,7 @@ import { Router,browserHistory } from 'react-router';
 import DevTools from './containers/DevTools/DevTools';
 import routes from './routes';
 import configureStore from './store';
-import 'antd/lib/index.css';
+import './common/lib'
 
 
 const store = configureStore();
