@@ -15,7 +15,7 @@ var DashBoardHeader = React.createClass({
             defaultSelectedKeys={['projects']} style={{lineHeight: '64px'}}>
             <Menu.Item key="projects">
               <Link to="/dashboard/projects">
-                未发布项目
+                项目列表
               </Link>
             </Menu.Item>
             <Menu.Item key="create">创建项目</Menu.Item>
