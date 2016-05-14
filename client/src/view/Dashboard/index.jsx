@@ -1,17 +1,31 @@
 import React from 'react';
 import DashBoardHeader from './DashBoardHeader';
-import {QueueAnim} from 'antd';
+import {Spin} from 'antd';
 import './Dashboard.css'
 
 var Dashboard = React.createClass({
   contextTypes: {
     router: React.PropTypes.object.isRequired
   },
+  getInitialState:function(){
+    return{
+      isLoading:true
+    }
+  },
   componentDidMount(){
     const { router } = this.context;
     router.push('/dashboard/projects');
   },
   render:function(){
+    var showComponents =(()=>{
+        if(this.state.isLoading){
+          return <Spin />
+        }
+        else{
+          return this.props.children
+        }
+    })();
+    console.log(showComponents);
     return(
       <div className='dashboard'>
         <div className='dashboard-header'>
@@ -19,9 +33,7 @@ var Dashboard = React.createClass({
         </div>
         <div className='dashboard-wrapper'>
           <div className='dashboard-container'>
-            <QueueAnim type="bottom" duration={600} ease="easeInOutQuad">
-              {this.props.children}
-            </QueueAnim>
+            {showComponents}
           </div>
         </div>
         <div className='dashboard-footer'>
@@ -30,5 +42,5 @@ var Dashboard = React.createClass({
       </div>
     )
   }
-})
+});
 export default Dashboard;
