@@ -1,6 +1,12 @@
 
-mport fetch from 'isomorphic-fetch';
+import fetch from 'isomorphic-fetch';
+import  {PROJECT_GET_PROJECTSINFO_REQUEST,PROJECT_GET_PROJECTSINFO_FAILURE,PROJECT_GET_PROJECTSINFO_SUCCESS}  from '../constants/projectConstants';
 
+/**
+ * 通过用户ID获得该用户下的所有项目信息
+ * @param  {[type]} userId [用户ID]
+ * @return {[type]}        [description]
+ */
 export function getProjectsByUserId(userId) {
   return function(dispatch){
     dispatch(getProjectsByUserIdRequest());
@@ -18,17 +24,48 @@ export function getProjectsByUserId(userId) {
     .then(parseJSON)
     .then(response=>{
       if (response.errCode == 0) {
-        dispatch(getProjectByIdSuccess(response.data.project));
+        dispatch(getProjectsByUserIdSuccess(response.data.result));
       }else{
-        dispatch(getProjectByIdFailure({
-          response: {
-          status: response.errCode,
-          statusText: formatErrMsg(response)
-          }
-        }));
+        handleResponseError(response);
       }
     }).catch(error=>{
-      
+        dispatch(getProjectsByUserIdFailure(error));
     })
+  }
+};
+
+/**
+ * 请求用户对应的项目Action
+ * @return {[type]} [description]
+ */
+export function getProjectsByUserIdRequest() {
+  return{
+    type:PROJECT_GET_PROJECTSINFO_REQUEST
+  }
+};
+/**
+ * 请求用户项目成功Action
+ * @param  {[type]} result [description]
+ * @return {[type]}        [description]
+ */
+export function getProjectsByUserIdSuccess(result) {
+  return{
+    type:PROJECT_GET_PROJECTSINFO_SUCCESS,
+    payload:{
+      projects:result
+    }
+  }
+};
+/**
+ * 请求用户项目失败Action
+ * @param  {[type]} error [description]
+ * @return {[type]}       [description]
+ */
+export function getProjectsByUserIdFailure(error) {
+  return{
+    type:PROJECT_GET_PROJECTSINFO_FAILURE,
+    payload:{
+      statusText:error.value
+    }
   }
 }

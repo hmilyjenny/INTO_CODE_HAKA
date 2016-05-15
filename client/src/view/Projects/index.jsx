@@ -1,6 +1,9 @@
 import React from 'react';
 import {Link} from 'react-router';
 import { Table,Spin,Icon } from 'antd';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { getProjectsByUserId } from '../../actions/projectActions';
 
 const columns = [{
   title: '项目名称',
@@ -69,7 +72,14 @@ var Projects = React.createClass({
     }
   },
   componentWillMount:function(){
-  
+    this.props.getProjectsByUserId(this.props.userId);
+  },
+  componentWillReceiveProps:function(nextProps){
+    if(this.state.isLoading){
+      this.setState({
+        isLoading:false
+      })
+    }
   },
   render:function(){
     var showComponents =(()=>{
@@ -77,12 +87,18 @@ var Projects = React.createClass({
           return <Spin />
         }
         else{
-          return <Table />
+          return <Table columns={columns} dataSource={this.props.projects} pagination={false}/>
         }
     })();
     return(
       {showComponents}
     )
   }
-})
-export default Projects;
+});
+const mapStateToProps = (state) => ({
+    projects: state.projects.projects
+});
+const mapDispatchToProps = (dispatch) => ({
+    getProjectsByUserId: bindActionCreators(getProjectsByUserId, dispatch)
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Projects);
