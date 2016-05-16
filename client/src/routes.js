@@ -10,8 +10,9 @@ import NotFound from './view/NotFound';
 export default(
    <Route path='/' component={App}>
       <IndexRoute component={Home} />
-      <Route path='/login' component={Login} />
-      <Route path='/dashboard' component={Dashboard}  >
+      <Route path='login' component={Login} />
+      <Route path='dashboard' component={Dashboard} />
+      <Route component={Dashboard}  >
         <Route path='projects/:userId' component={Projects} />
       </Route>
        <Route path='*' component={NotFound} />

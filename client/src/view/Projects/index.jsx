@@ -81,7 +81,7 @@ var Projects = React.createClass({
     this.props.getProjectsByUserId(this.props.routeParams.userId);
   },
   componentWillReceiveProps:function(nextProps){
-    if(this.state.isLoading){
+    if(this.state.isLoading&&!nextProps.requesting){
       this.setState({
         isLoading:false
       })
@@ -93,14 +93,17 @@ var Projects = React.createClass({
       }
     }
   },
+  getRowKey(record) {
+    return record._id;
+  },
   render:function(){
     var showComponents =()=>{
         if(this.state.isLoading){
           return <Spin />
         }
         else{
-          return <Table columns={columns} dataSource={this.props.dataSource} size="middle"
-              pagination={{ pageSize: 10 ,total:this.props.dataSource.length}} scroll={{ y: 450 }} />
+          return <Table columns={columns} dataSource={this.props.dataSource} size="middle" rowKey={this.getRowKey}
+              pagination={{ pageSize: 10 ,total:this.props.dataSource.length}} scroll={{x:1200, y: 450 }} />
         }
     };
     return( 
@@ -111,7 +114,8 @@ var Projects = React.createClass({
 const mapStateToProps = (state) => ({
     dataSource: state.project.projects,
     status:state.project.status,
-    statusText:state.project.statusText
+    statusText:state.project.statusText,
+    requesting:state.project.requesting
 });
 const mapDispatchToProps = (dispatch) => ({
     getProjectsByUserId: bindActionCreators(getProjectsByUserId, dispatch)

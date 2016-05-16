@@ -10,7 +10,7 @@ var Dashboard = React.createClass({
   },
   componentDidMount(){
     const { router } = this.context;
-    router.push(`/dashboard/projects/${this.props.userId}`);
+    router.push(`/projects/${this.props.userId}`);
   },
   render:function(){
     return(

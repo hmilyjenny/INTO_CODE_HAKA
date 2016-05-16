@@ -1,3 +1,6 @@
+html,body{
+  height: 100%!important;
+}
 body {
     margin:0;
     padding:0;
@@ -6,4 +9,5 @@ body {
     background-color: #F2F2F2 !important;
     min-height: 100%;    /* Minimum width of layout - remove line if not required */
             /* The min-width property does not work in old versions of Internet Explorer */
+    height: 100%!important;
   }

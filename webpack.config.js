@@ -2,7 +2,7 @@ var webpack = require('webpack');
 var path = require('path');
 
 module.exports = {
-  devtool: 'source-map',
+  devtool: 'eval-source-map',
   entry: [
           'webpack-hot-middleware/client?reload=true',
           './client/src/index.js',
@@ -29,8 +29,18 @@ module.exports = {
         test: /\.css$/,
         loaders:[
           'style-loader?sourceMap',
-          'css'
-        ]
+          'css-loader'
+        ],
+        include: __dirname
+      },
+      {
+        test: /\.less?$/,
+        loaders : [
+          'style-loader',
+          'css-loader',
+          'less-loader?{"sourceMap":true}'
+        ],
+        include: __dirname
       },
       {
         test: /\.(eot|woff|woff2|ttf|svg|png|jpg|gif)([\?]?.*)$/,

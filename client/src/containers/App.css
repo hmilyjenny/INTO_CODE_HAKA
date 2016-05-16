@@ -1,4 +1,6 @@
   .page-wrapper {
   background: #F2F2F2;
   animation: pageEnter .45s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+  min-height: 100%;
+  height: 100%!important;
 }

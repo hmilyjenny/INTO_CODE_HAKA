@@ -12,9 +12,6 @@ const store = configureStore();
 
 ReactDOM.render(
   <Provider store={store}>
-    <div>
-      <Router history={browserHistory} routes={routes} />
-      <DevTools/>
-    </div>
-  </Provider>, document.getElementById('app')
+    <Router history={browserHistory} routes={routes} />
+  </Provider>, document.getElementById('root')
 );
