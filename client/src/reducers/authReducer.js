@@ -1,6 +1,7 @@
 const initialState = {
     token: null,
-    userName: null,
+    userId:'571de929402e83a30b0b4408',
+    userName: 'Jason',
     isRegistering:false,
     isAuthenticated: false,
     isAuthenticating: false,

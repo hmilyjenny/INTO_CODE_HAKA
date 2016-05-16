@@ -1,3 +1,5 @@
+import { message } from 'antd';
+
 export function checkHttpStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response
@@ -16,6 +18,13 @@ export function handleResponseError(response) {
   var error = new Error(errMsg);
   error.response= {status:response.errCode,statusText:errMsg};
   throw error;
+}
+export function showErrMsg(status,statusText) {
+  //根据status值判断是什么类型的提示信息
+  message.error(statusText,2);
+}
+export function formatDbDate(argument) {
+  return argument.slice(0,10);
 }
 function formatErrMsg(errCode,errMsg) {
   switch (errCode) {

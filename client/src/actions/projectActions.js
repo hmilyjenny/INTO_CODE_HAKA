@@ -1,7 +1,7 @@
 
 import fetch from 'isomorphic-fetch';
 import  {PROJECT_GET_PROJECTSINFO_REQUEST,PROJECT_GET_PROJECTSINFO_FAILURE,PROJECT_GET_PROJECTSINFO_SUCCESS}  from '../constants/projectConstants';
-
+import {checkHttpStatus,parseJSON,handleResponseError} from '../utils'
 /**
  * 通过用户ID获得该用户下的所有项目信息
  * @param  {[type]} userId [用户ID]
@@ -10,7 +10,7 @@ import  {PROJECT_GET_PROJECTSINFO_REQUEST,PROJECT_GET_PROJECTSINFO_FAILURE,PROJE
 export function getProjectsByUserId(userId) {
   return function(dispatch){
     dispatch(getProjectsByUserIdRequest());
-    return fetch('/api/project/getProjectsByUserId/userId',{
+    return fetch(`/api/project/getProjectsByUserId/${userId}`,{
       method: 'GET',
       credentials: 'include',
       headers: 
@@ -65,7 +65,8 @@ export function getProjectsByUserIdFailure(error) {
   return{
     type:PROJECT_GET_PROJECTSINFO_FAILURE,
     payload:{
-      statusText:error.value
+      status:error.response.status,
+      statusText:error.response.statusText
     }
   }
 }

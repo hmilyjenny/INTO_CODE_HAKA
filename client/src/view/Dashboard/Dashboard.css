@@ -19,6 +19,14 @@
   margin: 16px 28px 16px 0;
   float: left;
 }
+.dashboard .divider {
+  margin: 0 4px;
+  color: #999;
+  display: inline-block;
+  height: 20px;
+  width: 1px;
+  background: #ccc;
+}
 .dashboard .dashboard-nav{
   border: 0;
   float: right;
@@ -57,6 +65,9 @@
   margin: 24px 0 0;
   position: relative;
   padding-top: 24px;
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-bottom: 24px;
   width: 100%;
   min-height: 600px;
   overflow: hidden;
