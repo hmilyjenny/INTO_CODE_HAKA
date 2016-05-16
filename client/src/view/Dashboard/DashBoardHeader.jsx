@@ -23,7 +23,8 @@ var DashBoardHeader = React.createClass({
             <SubMenu key="user" title={<span><span className="divider" /><Icon type="user"/>{this.props.userName}</span>} >
                 <Menu.Item key="info">用户信息</Menu.Item>
                 <Menu.Item key="channels">渠道信息</Menu.Item>
-                <Menu.Item key="logout">退出</Menu.Item>
+                <Menu.Divider />
+                <Menu.Item key="logout">注销</Menu.Item>
             </SubMenu>
           </Menu>
         </div>
