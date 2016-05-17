@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form, Input, Button, Row, Col, notification } from 'antd'
+import {Link} from 'react-router';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import './login.css'
@@ -29,11 +30,18 @@ var Login = React.createClass({
               <Input type='password' placeholder='password'  />
             </FormItem>
             <Row>
-              <Col span='16' offset='6'>
-                <Button type='primary' htmlType='submit'>确定</Button>
+              <Col span='16' offset='4' >
+                <Button type='primary' htmlType='submit' size='large' style={{width:'100%'}} >登录</Button>
               </Col>
             </Row>
           </Form>
+           <Row>
+              <Col span='24' className='login-link'  style={{ textAlign: 'right' }}>
+                <div style={{padding:7}}>
+                  <Link to='/register' style={{padding:5}} >免费注册</Link>
+                </div>
+              </Col>
+            </Row>
         </Col>
       </Row>
       )

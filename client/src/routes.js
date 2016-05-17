@@ -5,6 +5,7 @@ import Home from './view/Home';
 import Login from './view/Login';
 import Dashboard from './view/Dashboard';
 import Projects from './view/Projects';
+import CreateProject from './view/CreateProject'
 import NotFound from './view/NotFound';
 
 export default(
@@ -14,6 +15,7 @@ export default(
       <Route path='dashboard' component={Dashboard} />
       <Route component={Dashboard}  >
         <Route path='projects/:userId' component={Projects} />
+        <Route path='create/:userId' component={CreateProject} />
       </Route>
        <Route path='*' component={NotFound} />
   </Route>
