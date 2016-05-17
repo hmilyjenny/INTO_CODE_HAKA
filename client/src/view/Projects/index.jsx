@@ -74,10 +74,11 @@ const columns = [{
 var Projects = React.createClass({
   getInitialState:function(){
     return{
-      isLoading:true
+      isLoading:false
     }
   },
   componentWillMount:function(){
+    //this._isUnmounted=false;
     this.props.getProjectsByUserId(this.props.routeParams.userId);
   },
   componentWillReceiveProps:function(nextProps){
@@ -95,6 +96,9 @@ var Projects = React.createClass({
   },
   getRowKey(record) {
     return record._id;
+  },
+  componentWillUnmount(){
+    //this._isUnmounted=true
   },
   render:function(){
     var showComponents =()=>{
