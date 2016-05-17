@@ -1,12 +1,13 @@
 import React,{ PropTypes }from 'react';
-import { Tabs, Select } from 'antd';
-import ProjectNamed from '../ProjectNamed';
+import { Tabs, Select ,Form, Input, Button} from 'antd';
+//import ProjectNamed from '../ProjectNamed';
 import SelectCategory from '../SelectCategory';
 import UploadAudio from '../UploadAudio';
 import UploadImages from '../UploadImages';
+import './CreateProject.css';
 
 const TabPane = Tabs.TabPane;
-
+const FormItem = Form.Item;
 var CreateProject = React.createClass({
   propTypes: {
     children: PropTypes.any,
@@ -16,10 +17,6 @@ var CreateProject = React.createClass({
   },
   componentWillMount() {
     this.data = [{
-      key: 'projectNamed',
-      title:'项目命名',
-      component: <ProjectNamed />,
-    }, {
       key: 'selectCategory',
       title:'品类选择',
       component: <SelectCategory />,
@@ -37,7 +34,7 @@ var CreateProject = React.createClass({
     this.context.router.push(`/${activeKey}`)
   },
   render() {
-    let activeKey = 'projectNamed';
+    let activeKey = 'selectCategory';
     const { children } = this.props;
     if(children){
       this.data.forEach((d) => {
@@ -52,7 +49,19 @@ var CreateProject = React.createClass({
     });
     return (
         <div>
-          <Tabs onChange={this.onChange} type="card">
+          <div className='create-project-named-form'>
+            <Form inline >
+              <FormItem
+                label="账户：">
+                <Input placeholder="请输入账户名" />
+              </FormItem>
+              <FormItem label="密码：">
+                <Input type="password" placeholder="请输入密码"/>
+              </FormItem>
+              <Button type="primary" htmlType="submit">登录</Button>
+            </Form>
+          </div>
+          <Tabs onChange={this.onChange} >
               {tabs}
           </Tabs>
         </div>

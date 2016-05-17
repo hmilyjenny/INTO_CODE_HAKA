@@ -1,8 +1,8 @@
-.create-project{
+.create-project-named-form{
   text-align: "center";
-  width: 300px;
-  min-height: 500px;
-  padding: 24px;
-  background: '#ECECEC';
-
+  padding: 16px 8px;
+  margin-bottom: 10px;
+  background: #f8f8f8;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
 }

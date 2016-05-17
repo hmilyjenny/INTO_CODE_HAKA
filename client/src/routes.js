@@ -6,7 +6,6 @@ import Login from './view/Login';
 import Dashboard from './view/Dashboard';
 import Projects from './view/Projects';
 import CreateProject from './view/CreateProject';
-import ProjectNamed from './view/ProjectNamed';
 import SelectCategory from './view/SelectCategory';
 import UploadAudio from './view/UploadAudio';
 import UploadImages from './view/UploadImages';
@@ -23,10 +22,9 @@ export default(
       <Route component={Dashboard}  >
         <Route path='projects/:userId' component={Projects} />
         <Route path='create/:userId' component={CreateProject} >
-            <Redirect from="projectNamed" to="projectNamed" />
+            <Redirect from="selectCategory" to="selectCategory" />
         </Route>
         <Route component={CreateProject} >
-          <Route path='projectNamed' component={ProjectNamed} />
           <Route path='selectCategory' component={SelectCategory} />
           <Route path='uploadAudio' component={UploadAudio} />
           <Route path='uploadImages' component={UploadImages} />

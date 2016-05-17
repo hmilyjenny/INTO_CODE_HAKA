@@ -19,7 +19,7 @@ var DashBoardHeader = React.createClass({
               </Link>
             </Menu.Item>
             <Menu.Item key="create">
-              <Link to={`/projectNamed`}>
+              <Link to={`/selectCategory`}>
                 创建项目
               </Link>
             </Menu.Item>
