@@ -1,10 +1,9 @@
 import React from 'react';
-import {Button, Icon, Slider, Row, Col} from 'antd';
+import {Button, Icon, Slider, Row, Col, Progress} from 'antd';
+import QueueAnim from 'rc-queue-anim';
 import {handleResponseError} from '../../utils'
 import {Howl} from 'howler';
 import raf from 'raf';
-import "./css/masklayer-page.css";
-import "./css/loader-page.css";
 import "./css/preview-page.css";
 
 var imgsList = [];
@@ -21,6 +20,7 @@ var PreviewPage = React.createClass({
             currentTimePoints: [],
             currentIndex: 0,
             loadFinished: 0,
+            loadFailed: false,
             currentState: "play",
             currentPlayTime: 0
         }
@@ -42,15 +42,15 @@ var PreviewPage = React.createClass({
     },
     onModifyLoader: function (loadedNum, totalNum) {
         let percentT = loadedNum / totalNum * 100;
-        this.refs.loader__info.innerText = 'Loading ' + (parseInt(percentT)) + '%';
-        this.refs.loader__progress.style.width = percentT + '%';
         this.setState({loadFinished: parseInt(percentT)});
     },
     onPreload: function () {
         let self = this;
         let loaded = 0;
         let loadList = [];
+        imgsList = [];
         sound = null;
+        this.setState({loadFailed: false});
         loadList.push(this.state.currentAudio);
         for (let i = 0; i < this.state.currentImgs.length; i++) {
             loadList.push(this.state.currentImgs[i]);
@@ -67,8 +67,11 @@ var PreviewPage = React.createClass({
                     onloaderror: function (err) {
                         self.onModifyLoader(++loaded, loadList.length);
                         handleResponseError({errCode: -1, errMsg: '当前项目音频加载失败', data: {}});
+                        this.setState({loadFailed: true});
+                        return;
                     },
                     onend: function () {
+                        self.refs.masklayerDiv.style.visibility = "visible";
                         playing = false;
                         raf.cancel(this._raf);
                         self.setState({currentState: "play"});
@@ -85,6 +88,8 @@ var PreviewPage = React.createClass({
                     self.onModifyLoader(++loaded, loadList.length);
                     imgsList.push(tmpImg);
                     handleResponseError({errCode: -1, errMsg: '当前项目图片加载失败', data: {}});
+                    this.setState({loadFailed: true});
+                    return;
                 };
             }
         }
@@ -105,6 +110,7 @@ var PreviewPage = React.createClass({
         this.onPreload();
     },
     componentWillUnmount: function () {
+        imgsList = [];
         raf.cancel(this._raf);
         if (sound) {
             sound.stop();
@@ -113,14 +119,14 @@ var PreviewPage = React.createClass({
     },
     onPlayClick: function () {
         if (this.state.currentState == "play") {
+            this.refs.masklayerDiv.style.visibility = "hidden";
             playing = true;
             sound.play();
-            this.setState({
-                currentState: "pause"
-            });
+            this.setState({currentState: "pause"});
             this.onPlayTimeChange();
         }
         else {
+            this.refs.masklayerDiv.style.visibility = "visible";
             playing = false;
             sound.pause();
             this.setState({currentState: "play"});
@@ -150,34 +156,49 @@ var PreviewPage = React.createClass({
         }
         //音频根据用户需要播放
         sound.seek(value);
+        if (!playing) {
+            this.onPlayClick();
+        }
     },
     render: function () {
         let showImg;
+        let loadEle;
+        let playPoint;
         if (imgsList.length == this.state.currentImgs.length) {
             showImg = this.state.currentImgs[this.state.currentIndex].url;
         }
-        let playPoint = this.state.currentTimePoints[this.state.currentIndex];
+        playPoint = this.state.currentTimePoints[this.state.currentIndex];
+        if (this.state.loadFinished < 100) {
+            if (!this.state.loadFailed) {
+                loadEle = <Progress type="circle" strokeWidth={12}
+                                    percent={this.state.loadFinished}
+                                    status="active" format={percent=>percent+'%'}/>
+            }
+            else {
+                loadEle = <button className="button-play" onClick={this.onPreload}>重新加载</button>
+            }
+        }
+        else {
+            loadEle = <button className="button-play" onClick={this.onPlayClick}>播放</button>
+        }
         return (
             <Row type="flex" justify="space-around" align="middle">
                 <Col xs={8}>
                     <div className="myPhone">
                         <div className="myPhoneScreen">
-                            {
-                                this.state.loadFinished < 100 ?
-                                    <section ref="loader" className="loader">
-                                        <div className="loader__bar">
-                                            <div className="loader__progress-bg"></div>
-                                            <div ref="loader__progress" className="loader__progress"></div>
-                                            <div ref="loader__info" className="loader__info">Loading 0%</div>
-                                        </div>
-                                    </section>
-                                    :
-                                    < div className="shiwImg-div">
-                                        <span className="showImg-span">
-                                            <img className="showImg-img" src={showImg}/>
-                                        </span>
-                                    </div>
-                            }
+                            <div ref="masklayerDiv" className="masklayer-div">
+                                <span className="showImg-span">
+                                    {loadEle}
+                                </span>
+                            </div>
+                            <div className="shiwImg-div">
+                                <span className="showImg-span">
+                                    <QueueAnim type={["bottom","top"]}>
+                                        <img key={this.state.currentTimePoints[this.state.currentIndex]}
+                                             className="showImg-img" src={showImg}/>
+                                    </QueueAnim>
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </Col>

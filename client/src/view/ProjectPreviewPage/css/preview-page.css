@@ -23,7 +23,7 @@
     width: 100%;
     display: table;
     text-align: center;
-    background: white;
+    background: #FFFAF0;
 }
 
 .showImg-span {
@@ -37,12 +37,32 @@
     max-width: 100%;
 }
 
-/*.pageContent {*/
-/*text-align: center;*/
-/*margin-top: -30px;*/
-/*margin-left: -50%;*/
-/*background: #c8e5bc;*/
-/*}*/
+.masklayer-div {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    display: table;
+    text-align: center;
+    background: #FFFAF0;
+    z-index: 20000;
+    opacity: 0.8;
+    -moz-opacity: 0.8;
+    filter: alpha(opacity=80);
+}
+
+.button-play {
+    border: none;
+    outline: none;
+    background-image: radial-gradient(circle at 60% 20%, #2DB7F5 0%, #2DF4E5);
+    border-radius: 10em;
+    color: #FFF;
+    width: 10em;
+    height: 10em;
+    line-height: 10em;
+    padding: 0;
+}
 
 @media screen and (max-width: 50em) {
     .myPhone {
