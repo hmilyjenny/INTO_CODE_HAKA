@@ -37,7 +37,7 @@ var Header = React.createClass({
                     <Menu.Item key="dashboard" >
                       <Link to="/Dashboard">
                         控制面板
-                      </Link>  
+                      </Link>
                     </Menu.Item>
                   </Menu>
               </Col>

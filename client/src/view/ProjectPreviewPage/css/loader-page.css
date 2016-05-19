@@ -1,0 +1,46 @@
+.loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #C0DAD9;
+}
+
+.loader__bar {
+    color: #fff;
+    line-height: 2em;
+    height: 2em;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 10em;
+    text-align: center;
+    margin-left: -5em;
+    margin-top: -1em;
+    overflow: hidden;
+}
+
+.loader__progress, .loader__progress-bg, .loader__info {
+    position: absolute;
+    height: 100%;
+    left: 0;
+    top: 0;
+}
+
+.loader__progress {
+    width: 0;
+    background: #1A3831;
+    border-radius: 1em;
+}
+
+.loader__progress-bg {
+    width: 100%;
+    background: #3C776A;
+    border-radius: 1em;
+}
+
+.loader__info {
+    width: 100%;
+}

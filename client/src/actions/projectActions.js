@@ -1,6 +1,6 @@
 
 import fetch from 'isomorphic-fetch';
-import  {PROJECT_GET_PROJECTSINFO_REQUEST,PROJECT_GET_PROJECTSINFO_FAILURE,PROJECT_GET_PROJECTSINFO_SUCCESS}  from '../constants/projectConstants';
+import  * as PActions  from '../constants/projectConstants';
 import {checkHttpStatus,parseJSON,handleResponseError} from '../utils'
 /**
  * 通过用户ID获得该用户下的所有项目信息
@@ -13,7 +13,7 @@ export function getProjectsByUserId(userId) {
     return fetch(`/api/project/getProjectsByUserId/${userId}`,{
       method: 'GET',
       credentials: 'include',
-      headers: 
+      headers:
       {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -40,7 +40,7 @@ export function getProjectsByUserId(userId) {
  */
 export function getProjectsByUserIdRequest() {
   return{
-    type:PROJECT_GET_PROJECTSINFO_REQUEST
+    type: PActions.PROJECT_GET_PROJECTSINFO_REQUEST
   }
 };
 /**
@@ -50,7 +50,7 @@ export function getProjectsByUserIdRequest() {
  */
 export function getProjectsByUserIdSuccess(result) {
   return{
-    type:PROJECT_GET_PROJECTSINFO_SUCCESS,
+    type: PActions.PROJECT_GET_PROJECTSINFO_SUCCESS,
     payload:{
       projects:result
     }
@@ -63,7 +63,7 @@ export function getProjectsByUserIdSuccess(result) {
  */
 export function getProjectsByUserIdFailure(error) {
   return{
-    type:PROJECT_GET_PROJECTSINFO_FAILURE,
+    type: PActions.PROJECT_GET_PROJECTSINFO_FAILURE,
     payload:{
       status:error.response.status,
       statusText:error.response.statusText

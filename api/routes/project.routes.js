@@ -9,7 +9,6 @@ const projectRouter = new Router();
 
 // projectRouter.get('/getFileThumbnails/:projectId/:imgId', ProjectController.getFileThumbnails);
 // projectRouter.get('/getFileImage/:projectId/:imgId', ProjectController.getFileImage);
-// projectRouter.get('/getProjectAudioFileByAudioFileId',ProjectController.getProjectAudioFileByAudioFileId);
 // projectRouter.use(passport.authenticate('jwt', { session: false}));//经过passport-jwt中间件
 
 // projectRouter.get('/getProjectById/:id', ProjectController.getProjectById);
@@ -21,5 +20,6 @@ const projectRouter = new Router();
 // projectRouter.post('/createProjectImageFiles', upload.array('file'), ProjectController.createProjectImageFiles);
 // projectRouter.post('/setProjectStep',ProjectController.setProjectStep);
 projectRouter.get('/getProjectsByUserId/:userId',ProjectController.getProjectsByUserId);
+projectRouter.get('/getProjectAudioFileByAudioFileId/:audioId', ProjectController.getProjectAudioFileByAudioFileId);
 
 export default projectRouter

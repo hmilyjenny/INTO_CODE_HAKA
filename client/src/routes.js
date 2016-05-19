@@ -11,6 +11,7 @@ import UploadAudio from './view/UploadAudio';
 import UploadImages from './view/UploadImages';
 import EditAudioFile from './view/EditAudioFile';
 import NotFound from './view/NotFound';
+import ProjectPreview from './view/ProjectPreviewPage';
 
 export default(
    <Route path='/' component={App}>
@@ -24,6 +25,7 @@ export default(
         <Route path='create/:userId' component={CreateProject} >
             <Redirect from="selectCategory" to="selectCategory" />
         </Route>
+          <Route path='ProjectPreview' component={ProjectPreview}/>
         <Route component={CreateProject} >
           <Route path='selectCategory' component={SelectCategory} />
           <Route path='uploadAudio' component={UploadAudio} />

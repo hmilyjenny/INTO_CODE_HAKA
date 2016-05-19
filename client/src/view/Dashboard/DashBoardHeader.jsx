@@ -23,6 +23,11 @@ var DashBoardHeader = React.createClass({
                 创建项目
               </Link>
             </Menu.Item>
+              <Menu.Item key="preview">
+                  <Link to={`/ProjectPreview`}>
+                      项目浏览
+                  </Link>
+              </Menu.Item>
             <Menu.Item key="report">项目报表</Menu.Item>
             <SubMenu key="user" title={<span><Icon type="user"/>{this.props.userName}</span>} >
                 <Menu.Item key="info">用户信息</Menu.Item>
