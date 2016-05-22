@@ -1,21 +1,24 @@
 import React from 'react';
-import {Button, Icon, Slider, Row, Col, Progress, Affix} from 'antd';
+import {Row, Col, Progress, Affix} from 'antd';
 import QueueAnim from 'rc-queue-anim';
-import {handleResponseError} from '../../utils'
 import {Howl} from 'howler';
 import raf from 'raf';
-import "./css/preview-page.css";
+import DocumentTitle from 'react-document-title';
+import Socket from 'socket.io-client';
+import serverConfig from '../../../../config';
+import {handleResponseError} from '../../utils';
+import "./css/release-page.css";
 import Arrow from "./imgs/download.png";
 
 var imgsList = [];
 var sound = {};
-var marks = {};
-var max = 100;
 var playing = false;
+var io;
 
 var PreviewPage = React.createClass({
     getInitialState: function () {
         return {
+            projectName: "",
             currentAudio: {},
             currentImgs: [],
             currentTimePoints: [],
@@ -28,7 +31,21 @@ var PreviewPage = React.createClass({
         }
     },
     componentWillMount: function () {
+        io = Socket.connect(window.location.protocol + '//' + window.location.hostname + ':' + serverConfig.socketPort + serverConfig.socketURL);
+        io.on('connect', function () {
+            console.log("SocketIO server connect succeeded!");
+        }).on('connect_error', function (obj) {
+            console.log("SocketIO server connect failed!");
+            console.log(obj);
+        }).on('connect_timeout', function () {
+            console.log("SocketIO server connect timeout!");
+        }).on('new message', function (msgObj) {
+            alert("Server side:" + msgObj.message);
+        });
+        let projectId = this.props.params.projectId;
+        // TODO:window.location.origin获取主机头
         this.setState({
+            projectName: "项目名称" + projectId,
             currentAudio: {type: "mp3", url: "/api/project/getProjectAudioFileByAudioFileId/573c3b142617cd8967883f9f"},
             currentImgs: [
                 {type: "img", url: 'http://lorempixel.com/600/800/food', content: '这是第1个图片内容'},
@@ -65,7 +82,6 @@ var PreviewPage = React.createClass({
                     src: [loadList[i].url],
                     format: ["mp3"],
                     onload: function () {
-                        self.onSetMarks(this.duration());
                         self.onModifyLoader(++loaded, loadList.length);
                     },
                     onloaderror: function (err) {
@@ -98,18 +114,6 @@ var PreviewPage = React.createClass({
                 };
             }
             if (this.state.loadFailed)return;
-        }
-    },
-    onSetMarks: function (auidoLen) {
-        let marksStr = "{";
-        if (this.state.currentTimePoints.length > 0) {
-            for (let i = 0; i < this.state.currentTimePoints.length; i++) {
-                marksStr += this.state.currentTimePoints[i].toString() + ":'" + this.state.currentTimePoints[i].toString() + "',";
-            }
-            let audioTime = parseInt(auidoLen);
-            marksStr += audioTime.toString() + ":'" + audioTime.toString() + "单位(秒)'}";
-            marks = eval("(" + marksStr + ")");
-            max = audioTime;
         }
     },
     SwipeRevealItem: function (element, selfObj) {
@@ -210,10 +214,7 @@ var PreviewPage = React.createClass({
                 if (differenceInX > 0) {
                     //TODO:向左滑动(默认为图片模式,如果已经是纯文本模式则不动,如果为图片模式切换成纯文本模式并需要更新进度条数据)
                     if (selfObj.state.playMode == "img") {
-                        selfObj.setState({
-                            playMode: "text",
-                            currentState: "play"
-                        });
+                        selfObj.setState({playMode: "text"});
                         sound.pause();
                         return STATE_LEFT_SIDE;
                     }
@@ -223,10 +224,7 @@ var PreviewPage = React.createClass({
                 } else {
                     //向右滑动(默认为图片模式,如果已经是图片模式则不动,如果为纯文本模式则切换成图片模式并需要更新进度条数据)
                     if (selfObj.state.playMode == "text") {
-                        selfObj.setState({
-                            playMode: "img",
-                            currentState: "pause"
-                        });
+                        selfObj.setState({playMode: "img"});
                         sound.play();
                         return STATE_RIGHT_SIDE;
                     }
@@ -353,8 +351,9 @@ var PreviewPage = React.createClass({
     },
     componentDidMount: function () {
         this.onPreload();
+        // TODO:给shiwImg-div绑定Touch事件
         var swipeRevealItems = [];
-        var swipeRevealItemElements = document.querySelectorAll('.preShiwImg-div');
+        var swipeRevealItemElements = document.querySelectorAll('.shiwImg-div');
         for (var i = 0; i < swipeRevealItemElements.length; i++) {
             swipeRevealItems.push(new this.SwipeRevealItem(swipeRevealItemElements[i], this));
         }
@@ -375,6 +374,9 @@ var PreviewPage = React.createClass({
             sound.stop();
             sound = null;
         }
+        if (io) {
+            io.disconnect();
+        }
     },
     onPlayClick: function () {
         if (this.state.currentState == "play") {
@@ -394,7 +396,7 @@ var PreviewPage = React.createClass({
     onPlayTimeChange: function () {
         let playTime = parseInt(sound.seek());
         let arrIndex = this.state.currentTimePoints.indexOf(playTime);
-        let progressObj = document.querySelectorAll('.preLoader__progress');
+        let progressObj = document.querySelectorAll('.loader__progress');
         this.setState({currentPlayTime: playTime});
         if (arrIndex > -1) {
             this.setState({currentIndex: arrIndex});
@@ -421,23 +423,6 @@ var PreviewPage = React.createClass({
             this.onPlayClick();
         }
     },
-    onSliderValueChange: function (value) {
-        //根据用户选择的时间点重置当前图片节点
-        let tmpArr = this.state.currentTimePoints.filter((item)=> {
-            return item < value;
-        });
-        if (tmpArr.length > 0) {
-            let arrIndex = this.state.currentTimePoints.indexOf(tmpArr[tmpArr.length - 1]);
-            if (arrIndex > -1) {
-                this.setState({currentIndex: arrIndex});
-            }
-        }
-        //音频根据用户需要播放
-        sound.seek(value);
-        if (!playing) {
-            this.onPlayClick();
-        }
-    },
     render: function () {
         let showImg;
         let loadEle;
@@ -452,77 +437,52 @@ var PreviewPage = React.createClass({
                                 status="active" format={percent=>percent+'%'}/>
         }
         else if (this.state.loadFinished <= 100 && this.state.loadFailed) {
-            loadEle = <button className="preButton-play" onClick={this.onPreload}>重新加载</button>
+            loadEle = <button className="button-play" onClick={this.onPreload}>重新加载</button>
         }
         else if (this.state.loadFinished == 100 && !this.state.loadFailed) {
-            loadEle = <button className="preButton-play" onClick={this.onPlayClick}>播放</button>
+            loadEle = <button className="button-play" onClick={this.onPlayClick}>播放</button>
         }
         return (
-            <Row type="flex" justify="space-around" align="middle">
-                <Col xs={8}>
-                    <div className="myPhone">
-                        <div className="myPhoneScreen">
-                            <div ref="masklayerDiv" className="preMasklayer-div">
-                                <span className="preShowImg-span">
-                                    {loadEle}
-                                </span>
-                            </div>
-                            {
-                                playing ?
-                                    <Affix>
-                                        <div className="preLoader__progress"></div>
-                                    </Affix> : null
-                            }
-                            <div className="preShiwImg-div">
-                                <span className="preShiwImg-span">
-                                    <QueueAnim type={["bottom","top"]}>
-                                        <p key={this.state.currentTimePoints[this.state.currentIndex]}>
-                                            {this.state.currentImgs[this.state.currentIndex].content}
-                                        </p>
-                                    </QueueAnim>
-                                </span>
-                            </div>
-                            <div className="preShiwImg-div">
-                                <span className="preShowImg-span">
-                                    <QueueAnim type={["bottom","top"]}>
-                                        <img key={this.state.currentTimePoints[this.state.currentIndex]}
-                                             className="preShowImg-img" src={showImg}/>
-                                    </QueueAnim>
-                                </span>
-                            </div>
-                            {
-                                this.state.currentState == "pause" ?
-                                    <div className="preButton-Arrow">
-                                        <img src={Arrow}/>
-                                    </div> : null
-                            }
+            <DocumentTitle title={this.state.projectName}>
+                <Row type="flex" justify="space-around" align="middle">
+                    <Col xs={24}>
+                        <div ref="masklayerDiv" className="masklayer-div">
+                            <span className="showImg-span">
+                                {loadEle}
+                            </span>
                         </div>
-                    </div>
-                </Col>
-                <Col xs={16}>
-                    <Row type="flex" justify="space-around" align="middle">
-                        <Col xs={4}>
-                            {
-                                this.state.loadFinished == 100 ?
-                                    <Button type="primary" icon={
-                                    this.state.currentState=="play"?"caret-right":"pause"
-                                } onClick={this.onPlayClick} disabled={this.state.playMode=="text"}>{
-                                        this.state.currentPlayTime.toString() + "|" + parseInt(sound.duration()).toString()
-                                    }</Button> : null
-                            }
-                        </Col>
-                        <Col xs={20}>
-                            {
-                                this.state.loadFinished == 100 ?
-                                    <Slider marks={marks} defaultValue={0}
-                                            value={this.state.currentPlayTime} max={max}
-                                            onChange={this.onSliderValueChange}
-                                            disabled={this.state.playMode=="text"}/> : null
-                            }
-                        </Col>
-                    </Row>
-                </Col>
-            </Row>
+                        {
+                            playing ?
+                                <Affix>
+                                    <div className="loader__progress"></div>
+                                </Affix> : null
+                        }
+                        <div className="shiwImg-div">
+                            <span className="showImg-span">
+                                <QueueAnim type={["bottom","top"]}>
+                                    <p key={this.state.currentTimePoints[this.state.currentIndex]}>
+                                        {this.state.currentImgs[this.state.currentIndex].content}
+                                    </p>
+                                </QueueAnim>
+                            </span>
+                        </div>
+                        <div className="shiwImg-div">
+                            <span className="showImg-span">
+                                <QueueAnim type={["bottom","top"]}>
+                                    <img key={this.state.currentTimePoints[this.state.currentIndex]}
+                                         className="showImg-img" src={showImg}/>
+                                </QueueAnim>
+                            </span>
+                        </div>
+                        {
+                            this.state.currentState == "pause" ?
+                                <div className="button-Arrow">
+                                    <img src={Arrow}/>
+                                </div> : null
+                        }
+                    </Col>
+                </Row>
+            </DocumentTitle>
         );
     }
 })

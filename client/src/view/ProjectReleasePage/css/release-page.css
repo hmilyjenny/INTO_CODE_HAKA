@@ -1,45 +1,28 @@
-.myPhone {
-    position: relative;
-    overflow: hidden;
-    width: 25em;
-    height: 44em;
-    margin-top: -16px;
-    background: url(../imgs/iphone_white.svg) no-repeat 100% 0%;
-    background-size: 100%;
-}
-
-.myPhoneScreen {
-    position: relative;
-    overflow: hidden;
-    height: 72.8%;
-    margin: 6.9em 13.7% 0;
-    text-align: left;
-    border-radius: 4px 4px 0 0;
-    /*background: #5b9ce3;*/
-}
-
-.preShiwImg-div {
-    position: absolute;
+.shiwImg-div {
+    position: fixed;
+    _position: absolute;
     height: 100%;
     width: 100%;
     display: table;
     text-align: center;
     background: #FFFAF0;
+    z-index: 99;
 }
 
-.preShowImg-span {
+.showImg-span {
     display: table-cell;
     vertical-align: middle;
 }
 
-.preShowImg-img {
+.showImg-img {
     max-height: 100%;
     width: auto;
     max-width: 100%;
 }
 
-.preMasklayer-div {
-    position: absolute;
+.masklayer-div {
+    position: fixed;
+    _position: absolute;
     left: 0;
     top: 0;
     height: 100%;
@@ -47,13 +30,13 @@
     display: table;
     text-align: center;
     background: #FFFAF0;
-    z-index: 20000;
+    z-index: 999;
     opacity: 0.8;
     -moz-opacity: 0.8;
     filter: alpha(opacity=80);
 }
 
-.preButton-play {
+.button-play {
     border: none;
     outline: none;
     background-image: radial-gradient(circle at 60% 20%, #2DB7F5 0%, #2DF4E5);
@@ -66,41 +49,42 @@
     font-size: 2em;
 }
 
-.preButton-Arrow {
-    position: absolute;
+.button-Arrow {
+    position: fixed;
+    _position: absolute;
     bottom: 20px;
     left: 50%;
     margin-left: -20px;
     width: 40px;
     text-align: center;
     display: block;
-    z-index: 999;
-    animation-name: preArrowing;
-    -webkit-animation-name: preArrowing;
+    z-index: 9999;
+    animation-name: arrowing;
+    -webkit-animation-name: arrowing;
     animation-duration: 1.5s;
     -webkit-animation-duration: 1.5s;
     animation-iteration-count: infinite;
     -webkit-animation-iteration-count: infinite;
 }
 
-.preButton-Arrow img {
+.button-Arrow img {
     width: 40px;
 }
 
-.preLoader__progress {
+.loader__progress {
     height: 2px;
     width: 0;
     background: #87d068;
 }
 
-@keyframes preArrowing {
+@keyframes arrowing {
     50% {
         transform: translateY(10px);
         opacity: 1;
     }
 }
 
-@-webkit-keyframes preArrowing {
+@-webkit-keyframes arrowing {
     0%, to {
         -webkit-transform: translateY(-5px);
         opacity: .8
@@ -112,18 +96,5 @@
     to {
         -webkit-transform: translateY(-5px);
         opacity: .8
-    }
-}
-
-@media screen and (max-width: 50em) {
-    .myPhone {
-        width: 100%;
-        height: auto;
-        background-image: none;
-    }
-
-    .myPhoneScreen {
-        margin: 0;
-        border-radius: 0;
     }
 }
