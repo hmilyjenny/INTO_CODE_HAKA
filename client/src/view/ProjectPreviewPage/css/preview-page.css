@@ -16,6 +16,7 @@
     text-align: left;
     border-radius: 4px 4px 0 0;
     /*background: #5b9ce3;*/
+    cursor: url('../imgs/phone_mouse.ico'), default;
 }
 
 .preShiwImg-div {
@@ -25,17 +26,20 @@
     display: table;
     text-align: center;
     background: #FFFAF0;
+    cursor: url('../imgs/phone_mouse.ico'), default;
 }
 
 .preShowImg-span {
     display: table-cell;
     vertical-align: middle;
+    cursor: url('../imgs/phone_mouse.ico'), default;
 }
 
 .preShowImg-img {
     max-height: 100%;
     width: auto;
     max-width: 100%;
+    cursor: url('../imgs/phone_mouse.ico'), default;
 }
 
 .preMasklayer-div {
@@ -51,6 +55,7 @@
     opacity: 0.8;
     -moz-opacity: 0.8;
     filter: alpha(opacity=80);
+    cursor: url('../imgs/phone_mouse.ico'), default;
 }
 
 .preButton-play {
@@ -64,6 +69,7 @@
     line-height: 5em;
     padding: 0;
     font-size: 2em;
+    cursor: url('../imgs/phone_mouse.ico'), default;
 }
 
 .preButton-Arrow {
@@ -81,16 +87,19 @@
     -webkit-animation-duration: 1.5s;
     animation-iteration-count: infinite;
     -webkit-animation-iteration-count: infinite;
+    cursor: url('../imgs/phone_mouse.ico'), default;
 }
 
 .preButton-Arrow img {
     width: 40px;
+    cursor: url('../imgs/phone_mouse.ico'), default;
 }
 
 .preLoader__progress {
     height: 2px;
     width: 0;
     background: #87d068;
+    cursor: url('../imgs/phone_mouse.ico'), default;
 }
 
 @keyframes preArrowing {
