@@ -31,8 +31,8 @@ io.of(serverConfig.socketURL).on('connection', function (socket) {
     socket.on('new message', function (data) {
         // socket.broadcast.emit为广播
         // socket.emit为当前链接
-        socket.emit('new message', {
-            message: "Hello World=>" + socket.client.id
+        socket.emit('new result', {
+            message: "Server Response=>" + socket.client.id
         });
     });
     // 当有客户端断开链接时执行

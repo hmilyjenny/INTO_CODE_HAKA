@@ -5,6 +5,7 @@ const config = {
     //secret:'gengshangyicenglou',
     token: {secret: 'gengshangyicenglou', expires: 10080},
     socketPort: process.env.SPORT || 10086,
-    socketURL: '/Resolve'
+    socketURL: '/Resolve',
+    thriftPort: process.env.TPORT || 10010
 };
 export default config;

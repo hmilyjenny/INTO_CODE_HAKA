@@ -41,6 +41,8 @@ var PreviewPage = React.createClass({
             console.log("SocketIO server connect timeout!");
         }).on('new message', function (msgObj) {
             alert("Server side:" + msgObj.message);
+        }).on('new result', function (result) {
+            // 从服务器返回的处理结果
         });
         let projectId = this.props.params.projectId;
         // TODO:window.location.origin获取主机头
