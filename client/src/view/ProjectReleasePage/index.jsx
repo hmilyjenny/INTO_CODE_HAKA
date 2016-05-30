@@ -6,9 +6,10 @@ import raf from 'raf';
 import DocumentTitle from 'react-document-title';
 import Socket from 'socket.io-client';
 import serverConfig from '../../../../config';
-import {handleResponseError} from '../../utils';
 import "./css/release-page.css";
 import Arrow from "./imgs/download.png";
+import {AdBanner} from './AdBanner';
+import MoreInfo from './moreInfo';
 
 var imgsList = [];
 var sound = {};
@@ -27,7 +28,9 @@ var PreviewPage = React.createClass({
             loadFailed: false,
             currentState: "play",
             currentPlayTime: 0,
-            playMode: 'img'
+            playMode: 'img',
+            imgMaxHeight: '0px',
+            playEnded: false
         }
     },
     componentWillMount: function () {
@@ -46,16 +49,27 @@ var PreviewPage = React.createClass({
         });
         let projectId = this.props.params.projectId;
         // TODO:window.location.origin获取主机头
+        // http://humanhighway.github.io/react-audio-player/assets/stop.mp3
+        // old=>/api/project/getProjectAudioFileByAudioFileId/573c3b142617cd8967883f9f
+        // stop.mp3=>574bef969fb79a653796119e
         this.setState({
             projectName: "项目名称" + projectId,
-            currentAudio: {type: "mp3", url: "/api/project/getProjectAudioFileByAudioFileId/573c3b142617cd8967883f9f"},
+            currentAudio: {type: "mp3", url: "/api/project/getProjectAudioFileByAudioFileId/574bef969fb79a653796119e"},
             currentImgs: [
-                {type: "img", url: 'http://lorempixel.com/600/800/food', content: '这是第1个图片内容'},
-                {type: "img", url: 'http://lorempixel.com/578/1059/abstract', content: '这是第2个图片内容'},
-                {type: "img", url: 'http://lorempixel.com/578/1059/city', content: '这是第3个图片内容'},
-                {type: "img", url: 'http://lorempixel.com/578/1059/people', content: '这是第4个图片内容'},
-                {type: "img", url: 'http://lorempixel.com/578/1059/sports', content: '这是第5个图片内容'},
-                {type: "img", url: 'http://lorempixel.com/578/1059/business', content: '这是第6个图片内容'},
+                {type: "img", url: 'https://os.alipayobjects.com/rmsportal/UjXrGDbNwtXPcOT.png', content: '这是第1个图片内容'},
+                {
+                    type: "img",
+                    url: 'http://img.ui.cn/data/file/7/0/1/466107.png?imageMogr2/auto-orient/quality/100',
+                    content: '这是第2个图片内容'
+                },
+                {
+                    type: "img",
+                    url: 'http://img.ui.cn/data/file/0/2/1/466120.png?imageMogr2/auto-orient/quality/100',
+                    content: '这是第3个图片内容'
+                },
+                {type: "img", url: 'https://os.alipayobjects.com/rmsportal/xWUTmuYtkOFzmED.jpg', content: '这是第4个图片内容'},
+                {type: "img", url: 'https://os.alipayobjects.com/rmsportal/UjXrGDbNwtXPcOT.png', content: '这是第5个图片内容'},
+                {type: "img", url: 'https://os.alipayobjects.com/rmsportal/ZsXPaItFKJdTBWa.png', content: '这是第6个图片内容'},
                 {type: "img", url: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png', content: '这是第7个图片内容'}
             ],
             currentTimePoints: [0, 10, 20, 30, 40, 50, 60],
@@ -95,10 +109,14 @@ var PreviewPage = React.createClass({
                          */
                     },
                     onend: function () {
-                        self.refs.masklayerDiv.style.visibility = "visible";
+                        self.refs.masklayerDiv.style.visibility = "hidden";
+                        self.refs.moreinfoDiv.style.visibility = "visible";
                         playing = false;
                         raf.cancel(this._raf);
-                        self.setState({currentState: "play"});
+                        self.setState({
+                            currentState: "play",
+                            playEnded: true
+                        });
                     }
                 });
             } else {
@@ -166,6 +184,9 @@ var PreviewPage = React.createClass({
         this.handleGestureEnd = function (evt) {
             evt.preventDefault();
             if (evt.touches && evt.touches.length > 0) {
+                return;
+            }
+            if (!lastTouchPos) {
                 return;
             }
             if (window.navigator.msPointerEnabled) {
@@ -343,6 +364,7 @@ var PreviewPage = React.createClass({
                     currentState = newState;
                 }
             }
+            lastTouchPos = null;
         };
         if (window.navigator.msPointerEnabled) {
             swipeFrontElement.addEventListener('MSPointerDown', this.handleGestureStart, true);
@@ -363,11 +385,13 @@ var PreviewPage = React.createClass({
             document.body.addEventListener('touchstart', function () {
             }, false);
         }
+        this.setState({imgMaxHeight: swipeRevealItemElements[0].clientHeight});
         window.onresize = function () {
             for (var i = 0; i < swipeRevealItems.length; i++) {
                 swipeRevealItems[i].resize();
             }
         };
+        this.refs.moreinfoDiv.style.visibility = "hidden";
     },
     componentWillUnmount: function () {
         imgsList = [];
@@ -378,9 +402,12 @@ var PreviewPage = React.createClass({
         }
         if (io) {
             io.disconnect();
+            io = null;
         }
     },
     onPlayClick: function () {
+        this.setState({playEnded: false});
+        this.refs.moreinfoDiv.style.visibility = "hidden";
         if (this.state.currentState == "play") {
             this.refs.masklayerDiv.style.visibility = "hidden";
             playing = true;
@@ -453,6 +480,11 @@ var PreviewPage = React.createClass({
                                 {loadEle}
                             </span>
                         </div>
+                        <div ref="moreinfoDiv" className="moreInfo-div">
+                            <span className="showImg-span">
+                                <MoreInfo playFn={this.onPlayClick} isEnded={this.state.playEnded}/>
+                            </span>
+                        </div>
                         {
                             playing ?
                                 <Affix>
@@ -472,9 +504,14 @@ var PreviewPage = React.createClass({
                             <span className="showImg-span">
                                 <QueueAnim type={["bottom","top"]}>
                                     <img key={this.state.currentTimePoints[this.state.currentIndex]}
-                                         className="showImg-img" src={showImg}/>
+                                         className="showImg-img"
+                                         style={{maxHeight:this.state.imgMaxHeight}}
+                                         src={showImg}/>
                                 </QueueAnim>
                             </span>
+                        </div>
+                        <div name="adMain" className="ad-div" style={{top:this.state.imgMaxHeight}}>
+                            <AdBanner/>
                         </div>
                         {
                             this.state.currentState == "pause" ?

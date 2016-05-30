@@ -61,7 +61,9 @@ app.use(bodyParser.urlencoded({limit: '20mb', extended: false}));
 app.use(express.static(__dirname + "/public"));
 
 import project from './api/routes/project.routes';
+import channel from './api/routes/channels.routes';
 app.use('/api/project', project);
+app.use('/api/channels', channel);
 
 app.get('*', function (request, response) {
     response.sendFile(path.resolve(__dirname, 'public', 'index.html'))

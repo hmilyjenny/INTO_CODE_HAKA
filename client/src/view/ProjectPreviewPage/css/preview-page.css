@@ -1,3 +1,4 @@
+/*手机模拟器样式*/
 .myPhone {
     position: relative;
     overflow: hidden;
@@ -19,9 +20,53 @@
     cursor: url('../imgs/phone_mouse.ico'), default;
 }
 
-.preShiwImg-div {
+/*广告位样式*/
+.preAd-div {
+    position: absolute;
+    height: 10%;
+    width: 100%;
+    display: table;
+    text-align: left;
+    background: #FFFAF0;
+    cursor: url('../imgs/phone_mouse.ico'), default;
+}
+
+.preAd-divContent {
     position: absolute;
     height: 100%;
+    width: 100%;
+    display: inline;
+    text-align: left;
+    background: #FFFAF0;
+    cursor: url('../imgs/phone_mouse.ico'), default;
+}
+
+.preAd-divContent-Head {
+    position: absolute;
+    height: 100%; /*宽度与高度一致从JS设置*/
+    display: table;
+    text-align: center;
+    background: transparent;
+    cursor: url('../imgs/phone_mouse.ico'), default;
+}
+
+.preAd-divContent-Body {
+    /*
+    初始位置需要往右偏移preAd-divContent-Head的宽度
+    整个Body的宽度为100%宽度-preAd-divContent-Head的宽度
+    */
+    position: absolute;
+    height: 100%;
+    display: table;
+    text-align: left;
+    background: #FFFAF0;
+    cursor: url('../imgs/phone_mouse.ico'), default;
+}
+
+/*图片播放样式*/
+.preShiwImg-div {
+    position: absolute;
+    height: 90%;
     width: 100%;
     display: table;
     text-align: center;
@@ -36,12 +81,13 @@
 }
 
 .preShowImg-img {
-    max-height: 100%;
     width: auto;
+    max-height: 100%;
     max-width: 100%;
     cursor: url('../imgs/phone_mouse.ico'), default;
 }
 
+/*播放遮罩层样式*/
 .preMasklayer-div {
     position: absolute;
     left: 0;
@@ -58,6 +104,7 @@
     cursor: url('../imgs/phone_mouse.ico'), default;
 }
 
+/*播放按钮样式*/
 .preButton-play {
     border: none;
     outline: none;
@@ -72,9 +119,10 @@
     cursor: url('../imgs/phone_mouse.ico'), default;
 }
 
+/*播放控制样式(一个向上箭头)*/
 .preButton-Arrow {
     position: absolute;
-    bottom: 20px;
+    bottom: 13%;
     left: 50%;
     margin-left: -20px;
     width: 40px;
@@ -95,6 +143,7 @@
     cursor: url('../imgs/phone_mouse.ico'), default;
 }
 
+/*播放进度条样式*/
 .preLoader__progress {
     height: 2px;
     width: 0;
@@ -102,6 +151,46 @@
     cursor: url('../imgs/phone_mouse.ico'), default;
 }
 
+/*播放完成时更多信息的样式*/
+.preMoreInfo-div {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    display: table;
+    text-align: center;
+    background: black;
+    opacity: 0.9;
+    -moz-opacity: 0.9;
+    filter: alpha(opacity=90);
+    cursor: url('../imgs/phone_mouse.ico'), default;
+}
+
+.preMoreInfo-divContent {
+    height: 60%;
+    width: 100%;
+    background: black;
+    display: run-in;
+    cursor: url('../imgs/phone_mouse.ico'), default;
+}
+
+/*重播按钮样式*/
+.preButton-Reset {
+    border: none;
+    outline: none;
+    background-image: radial-gradient(circle at 60% 20%, #2DB7F5 0%, #2DF4E5);
+    border-radius: 0.3em;
+    color: #FFF;
+    width: 100%;
+    height: 1.8em;
+    line-height: 1.8em;
+    padding: 0;
+    font-size: 2em;
+    cursor: url('../imgs/phone_mouse.ico'), default;
+}
+
+/*箭头动画*/
 @keyframes preArrowing {
     50% {
         transform: translateY(10px);

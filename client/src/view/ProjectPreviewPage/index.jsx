@@ -1,11 +1,14 @@
 import React from 'react';
 import {Button, Icon, Slider, Row, Col, Progress, Affix} from 'antd';
 import QueueAnim from 'rc-queue-anim';
-import {handleResponseError} from '../../utils'
 import {Howl} from 'howler';
 import raf from 'raf';
 import "./css/preview-page.css";
 import Arrow from "./imgs/download.png";
+import {AdBanner} from './AdBanner';
+import MoreInfo from './moreInfo';
+import {showModeMsg} from '../../utils';
+import QRCodeComponent from './QRCode';
 
 var imgsList = [];
 var sound = {};
@@ -24,7 +27,9 @@ var PreviewPage = React.createClass({
             loadFailed: false,
             currentState: "play",
             currentPlayTime: 0,
-            playMode: 'img'
+            playMode: 'img',
+            imgMaxHeight: '0px',
+            playEnded: false
         }
     },
     componentWillMount: function () {
@@ -37,9 +42,10 @@ var PreviewPage = React.createClass({
                 {type: "img", url: 'http://lorempixel.com/578/1059/people', content: '这是第4个图片内容'},
                 {type: "img", url: 'http://lorempixel.com/578/1059/sports', content: '这是第5个图片内容'},
                 {type: "img", url: 'http://lorempixel.com/578/1059/business', content: '这是第6个图片内容'},
-                {type: "img", url: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png', content: '这是第7个图片内容'}
+                {type: "img", url: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png', content: '这是第7个图片内容'},
+                {type: "img", url: 'https://os.alipayobjects.com/rmsportal/xWUTmuYtkOFzmED.jpg', content: '这是第8个图片内容'},
             ],
-            currentTimePoints: [0, 10, 20, 30, 40, 50, 60],
+            currentTimePoints: [0, 10, 20, 30, 40, 50, 60, 150],
             currentIndex: 0,
             currentPlayTime: 0
         });
@@ -71,16 +77,20 @@ var PreviewPage = React.createClass({
                     onloaderror: function (err) {
                         self.onModifyLoader(++loaded, loadList.length);
                         self.setState({loadFailed: true});
+                        showModeMsg('error', '当前项目音频加载失败');
                         /*
                          * TODO: 全局错误提示
                          * handleResponseError({errCode: -1, errMsg: '当前项目音频加载失败', data: {}});
                          */
                     },
                     onend: function () {
-                        self.refs.masklayerDiv.style.visibility = "visible";
+                        self.refs.masklayerDiv.style.visibility = "hidden";
                         playing = false;
                         raf.cancel(this._raf);
-                        self.setState({currentState: "play"});
+                        self.setState({
+                            currentState: "play",
+                            playEnded: true
+                        });
                     }
                 });
             } else {
@@ -94,6 +104,7 @@ var PreviewPage = React.createClass({
                     self.onModifyLoader(++loaded, loadList.length);
                     imgsList.push(tmpImg);
                     self.setState({loadFailed: true});
+                    showModeMsg('error', '当前项目图片加载失败');
                     //handleResponseError({errCode: -1, errMsg: '当前项目图片加载失败', data: {}});
                 };
             }
@@ -160,6 +171,9 @@ var PreviewPage = React.createClass({
         this.handleGestureEnd = function (evt) {
             evt.preventDefault();
             if (evt.touches && evt.touches.length > 0) {
+                return;
+            }
+            if (!lastTouchPos) {
                 return;
             }
             if (window.navigator.msPointerEnabled) {
@@ -343,6 +357,7 @@ var PreviewPage = React.createClass({
                     currentState = newState;
                 }
             }
+            lastTouchPos = null;
         };
         if (window.navigator.msPointerEnabled) {
             swipeFrontElement.addEventListener('MSPointerDown', this.handleGestureStart, true);
@@ -362,6 +377,7 @@ var PreviewPage = React.createClass({
             document.body.addEventListener('touchstart', function () {
             }, false);
         }
+        this.setState({imgMaxHeight: swipeRevealItemElements[0].clientHeight});
         window.onresize = function () {
             for (var i = 0; i < swipeRevealItems.length; i++) {
                 swipeRevealItems[i].resize();
@@ -377,6 +393,7 @@ var PreviewPage = React.createClass({
         }
     },
     onPlayClick: function () {
+        this.setState({playEnded: false});
         if (this.state.currentState == "play") {
             this.refs.masklayerDiv.style.visibility = "hidden";
             playing = true;
@@ -475,7 +492,7 @@ var PreviewPage = React.createClass({
                             }
                             <div className="preShiwImg-div">
                                 <span className="preShiwImg-span">
-                                    <QueueAnim type={["bottom","top"]}>
+                                    <QueueAnim type={["bottom","top"]} style={{maxHeight:this.state.imgMaxHeight}}>
                                         <p key={this.state.currentTimePoints[this.state.currentIndex]}>
                                             {this.state.currentImgs[this.state.currentIndex].content}
                                         </p>
@@ -484,16 +501,29 @@ var PreviewPage = React.createClass({
                             </div>
                             <div className="preShiwImg-div">
                                 <span className="preShowImg-span">
-                                    <QueueAnim type={["bottom","top"]}>
+                                    <QueueAnim type={["bottom","top"]} style={{maxHeight:this.state.imgMaxHeight}}>
                                         <img key={this.state.currentTimePoints[this.state.currentIndex]}
-                                             className="preShowImg-img" src={showImg}/>
+                                             className="preShowImg-img"
+                                             style={{maxHeight:this.state.imgMaxHeight}}
+                                             src={showImg}/>
                                     </QueueAnim>
                                 </span>
+                            </div>
+                            <div className="preAd-div" style={{top:this.state.imgMaxHeight}}>
+                                <AdBanner />
                             </div>
                             {
                                 this.state.currentState == "pause" ?
                                     <div className="preButton-Arrow">
                                         <img src={Arrow}/>
+                                    </div> : null
+                            }
+                            {
+                                this.state.playEnded ?
+                                    <div className="preMoreInfo-div">
+                                        <span className="preShowImg-span">
+                                            <MoreInfo playFn={this.onPlayClick}/>
+                                        </span>
                                     </div> : null
                             }
                         </div>
@@ -519,6 +549,11 @@ var PreviewPage = React.createClass({
                                             onChange={this.onSliderValueChange}
                                             disabled={this.state.playMode=="text"}/> : null
                             }
+                        </Col>
+                    </Row>
+                    <Row type="flex" justify="space-around" align="middle">
+                        <Col xs={24}>
+                            <QRCodeComponent QRText="http://192.168.1.102:8000/ProjectRelease/No123"/>
                         </Col>
                     </Row>
                 </Col>

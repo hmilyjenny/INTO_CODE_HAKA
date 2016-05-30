@@ -1,7 +1,50 @@
-.shiwImg-div {
+.ad-div {
+    position: fixed;
+    _position: absolute;
+    height: 10%;
+    width: 100%;
+    display: table;
+    text-align: left;
+    background: #FFFAF0;
+    z-index: 99;
+}
+
+.ad-divContent {
     position: fixed;
     _position: absolute;
     height: 100%;
+    width: 100%;
+    display: inline;
+    text-align: left;
+    background: #FFFAF0;
+}
+
+.ad-divContent-Head {
+    position: fixed;
+    _position: absolute;
+    height: 100%; /*宽度与高度一致从JS设置*/
+    display: table;
+    text-align: center;
+    background: transparent;
+}
+
+.ad-divContent-Body {
+    /*
+    初始位置需要往右偏移ad-divContent-Head的宽度
+    整个Body的宽度为100%宽度-ad-divContent-Head的宽度
+    */
+    position: fixed;
+    _position: absolute;
+    height: 100%;
+    display: table;
+    text-align: left;
+    background: #FFFAF0;
+}
+
+.shiwImg-div {
+    position: fixed;
+    _position: absolute;
+    height: 90%;
     width: 100%;
     display: table;
     text-align: center;
@@ -15,8 +58,8 @@
 }
 
 .showImg-img {
-    max-height: 100%;
     width: auto;
+    max-height: 100%;
     max-width: 100%;
 }
 
@@ -52,7 +95,7 @@
 .button-Arrow {
     position: fixed;
     _position: absolute;
-    bottom: 20px;
+    bottom: 13%;
     left: 50%;
     margin-left: -20px;
     width: 40px;
@@ -75,6 +118,41 @@
     height: 2px;
     width: 0;
     background: #87d068;
+}
+
+.moreInfo-div {
+    position: fixed;
+    _position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    display: table;
+    text-align: center;
+    background: black;
+    opacity: 0.7;
+    -moz-opacity: 0.7;
+    filter: alpha(opacity=70);
+    z-index: 999;
+}
+
+.moreInfo-divContent {
+    height: 60%;
+    width: 100%;
+}
+
+/*重播按钮样式*/
+.button-reset {
+    border: none;
+    outline: none;
+    background-image: radial-gradient(circle at 60% 20%, #2DB7F5 0%, #2DF4E5);
+    border-radius: 0.3em;
+    color: #FFF;
+    width: 100%;
+    height: 1.8em;
+    line-height: 1.8em;
+    padding: 0;
+    font-size: 3em;
 }
 
 @keyframes arrowing {

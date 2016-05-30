@@ -13,6 +13,7 @@ import EditAudioFile from './view/EditAudioFile';
 import NotFound from './view/NotFound';
 import ProjectPreview from './view/ProjectPreviewPage';
 import ProjectRelease from './view/ProjectReleasePage';
+import PersonalChannelsManage from './view/ChannelsPage';
 
 export default(
     <Route path='/' component={App}>
@@ -34,6 +35,7 @@ export default(
                 <Route path='uploadImages' component={UploadImages}/>
                 <Route path='editAudioFile' component={EditAudioFile}/>
             </Route>
+            <Route path='PersonalChannelsManage/:userId' component={PersonalChannelsManage}/>
         </Route>
         <Route path='*' component={NotFound}/>
     </Route>
